@@ -17,7 +17,7 @@
 #'    \item{cp.info}{matrix containing information about the change point estimators, such as their order of detection,
 #'    the intervals \code{(s, e)} in which each estimator (\code{b}) is detected, and the associated max-CUSUMs}
 #' @references H. Cho and P. Fryzlewicz (2020) Multiple change point detection under serial dependence: 
-#' wild energy maximisation and gappy Schwarz criterion \emph{arXiv preprint arXiv:}.
+#' wild energy maximisation and gappy Schwarz criterion.
 #' @examples 
 #' set.seed(111)
 #' f <- rep(c(0, 5, 2, 8, 1, -2), c(100, 200, 200, 50, 200, 250))
