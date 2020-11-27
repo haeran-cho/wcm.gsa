@@ -2,12 +2,14 @@
 Software accompanying 
 > H. Cho and P. Fryzlewicz (2020) "Multiple change point detection under serial dependence: wild energy maximisation and gappy Schwarz criterion".
 
-The main routine of WEM.gSC is contained in main.R (`wem.gsc`) and the code used for air quality data analysis is contained in data.R.
+- The main routine of WEM.gSC is contained in main.R (`wem.gsc`). 
+- Codes used for analysing nitrogen oxides concentrations in London (contained in `AirQualityData.csv`) are provided in air_data.R.
+- Codes used for analysing Hadley Centre central England temperature data (contained in `hadcet.csv`) are provided in temp_data.R.
 
 To use WEM.gSC, do the following:
 
 - Source main.R into `R`.
-- Read the descriptions within main.R.
+- Read the descriptions for `wem.gsc` within main.R.
 
 For example,
 
