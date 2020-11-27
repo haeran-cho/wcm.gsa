@@ -1,6 +1,7 @@
 ## Analysis of Hadley Centre central England temperature (HadCET) data 
 
 source('main.R')
+
 dat <- read.csv('hadcet.csv')
 # contains 4 columns including years and 
 # yearly average of the monthly mean, maximum and minimum temperatures from 1878 to 2019
