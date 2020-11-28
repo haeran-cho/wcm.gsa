@@ -1,6 +1,6 @@
 # wem.gsc
 Software accompanying 
-> H. Cho and P. Fryzlewicz (2020) "Multiple change point detection under serial dependence: wild energy maximisation and gappy Schwarz criterion".
+> H. Cho and P. Fryzlewicz (2020) "Multiple change point detection under serial dependence: Wild energy maximisation and gappy Schwarz criterion".
 
 - The main routine of WEM.gSC is contained in main.R (`wem.gsc`). 
 - Codes used for analysing nitrogen oxides concentrations in London (contained in `AirQualityData.csv`) are provided in air_data.R.
