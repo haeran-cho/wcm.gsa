@@ -1,18 +1,16 @@
 ## Analysis of Hadley Centre central England temperature (HadCET) data 
 
 source('main.R')
-
-dat <- read.csv('hadcet.csv')
+dat <- read.csv('data/hadcet.csv')
 # contains 4 columns including years and 
 # yearly average of the monthly mean, maximum and minimum temperatures from 1878 to 2019
 
-
 x <- dat$mean
-# x <- dat$max
-# x <- dat$min
+x <- dat$max
+x <- dat$min
 
 ## change point analysis
-w <- wem.gsc(x, min.len = 10, p.max = 5, double.cusum = !TRUE)
+w <- wem.gsa(x, min.len = 10, p.max = 5, double.cusum = !TRUE)
 dat$dates[w$cp]
 dat$dates[w$rcp]
 
