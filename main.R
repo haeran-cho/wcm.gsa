@@ -1,6 +1,6 @@
-#' WEM.gSC
+#' WEM.gSA
 #' 
-#' WEM.gSC procedure for multiple change point detection in the mean of serially correlated time series
+#' WEM.gSA procedure for multiple change point detection in the mean of serially correlated time series
 #' 
 #' @param x input data (a \code{numeric} vector)
 #' @param R number of deterministic intervals to be drawn at each iteration of WBS2
@@ -16,16 +16,17 @@
 #'    \item{rcp}{refined change point estimators}
 #'    \item{cp.info}{matrix containing information about the change point estimators, such as their order of detection,
 #'    the intervals \code{(s, e)} in which each estimator (\code{b}) is detected, and the associated max-CUSUMs}
-#' @references H. Cho and P. Fryzlewicz (2020) Multiple change point detection under serial dependence: 
-#' wild energy maximisation and gappy Schwarz criterion.
+#' @references H. Cho and P. Fryzlewicz (2021) Multiple change point detection under serial dependence: 
+#' wild energy maximisation and gappy Schwarz algorithm.
 #' @examples 
 #' set.seed(111)
 #' f <- rep(c(0, 5, 2, 8, 1, -2), c(100, 200, 200, 50, 200, 250))
 #' x <- f + arima.sim(list(ar = c(.75, -.5), ma = c(.8, .7, .6, .5, .4, .3)), n = length(f), sd = 1)
-#' wem.gsc(x, double.cusum = TRUE)
+#' wem.gsa(x, double.cusum = TRUE)
 #' @export
-wem.gsc <- function(x, R = 100, min.len = NULL, 
-                    double.cusum = FALSE, Q = floor(log(length(x))^1.9), max.iter = 5, 
+wem.gsa <- function(x, R = 100, min.len = NULL, 
+                    gappy = TRUE, Q = floor(log(length(x))^1.9), 
+                    double.cusum = FALSE, max.iter = 5, 
                     p.max = 10, pen = log(length(x))^1.01) {
   
   n <- length(x)
@@ -42,29 +43,36 @@ wem.gsc <- function(x, R = 100, min.len = NULL,
 
   ecp.list <- list()
   current <- c()
-  niter <- ii <- 0
-  if(!double.cusum){
-    for(k in sort(sort(abs(diff(z)), decreasing = TRUE, index.return = TRUE)$ix[1:max.iter])){
-      new.cp <- sort(ecp.seq[(ii + 1):k])
-      current <- sort(c(current, new.cp))
-      ecp.list <- c(ecp.list, list(current))
-      ii <- k
+  if(gappy){
+    niter <- ii <- 0
+    if(!double.cusum){
+      for(k in sort(sort(abs(diff(z)), decreasing = TRUE, index.return = TRUE)$ix[1:max.iter])){
+        new.cp <- sort(ecp.seq[(ii + 1):k])
+        current <- sort(c(current, new.cp))
+        ecp.list <- c(ecp.list, list(current))
+        ii <- k
+      }
+    } else{
+      k0 <- which.max(abs(diff(z[(ii + 1):Q]))) + ii 
+      while(ii < Q - 1 & niter < max.iter){
+        if(double.cusum){
+          eval <- ((Q - ii)/(1:(Q - ii - 1)) * ((Q - ii - 1):1))^.5 * (cs[(ii + 1):(Q - 1)] - (ii > 0)*cs[max(1, ii)] - (cs[Q] - (ii > 0)*cs[max(1, ii)])/(Q - ii) * (1:(Q - ii - 1)))
+          k <- which.max(eval) + ii
+        } else k <- k0
+        new.cp <- sort(ecp.seq[(ii + 1):k])
+        current <- sort(c(current, new.cp))
+        ecp.list <- c(ecp.list, list(current))
+        ii <- k
+        k0 <- which.max(abs(diff(z[(ii + 1):Q]))) + ii 
+        niter <- niter + 1
+      }
     }
   } else{
-    k0 <- which.max(abs(diff(z[(ii + 1):Q]))) + ii 
-    while(ii < Q - 1 & niter < max.iter){
-      if(double.cusum){
-        eval <- ((Q - ii)/(1:(Q - ii - 1)) * ((Q - ii - 1):1))^.5 * (cs[(ii + 1):(Q - 1)] - (ii > 0)*cs[max(1, ii)] - (cs[Q] - (ii > 0)*cs[max(1, ii)])/(Q - ii) * (1:(Q - ii - 1)))
-        k <- which.max(eval) + ii
-      } else k <- k0
-      new.cp <- sort(ecp.seq[(ii + 1):k])
-      current <- sort(c(current, new.cp))
+    for(ii in 1:(Q - 1)){
+      current <- sort(c(current, ecp.seq[ii]))
       ecp.list <- c(ecp.list, list(current))
-      ii <- k
-      k0 <- which.max(abs(diff(z[(ii + 1):Q]))) + ii 
-      niter <- niter + 1
     }
-  }  
+  }
   
   ll <- length(ecp.list)
   while(ll >= 1){
@@ -189,7 +197,7 @@ max.cusum <- function(ind, y, min.len) {
   
 }
 
-#' gSC: model selection using Schwarz criterion
+#' gSA: model selection using Schwarz criterion
 #' @keywords internal
 ms.sc <- function(x, s, e, ecp, p.max = 10, pen = NULL){
   
