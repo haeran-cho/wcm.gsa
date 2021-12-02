@@ -6,7 +6,7 @@ Software accompanying
 - Codes used for analysing nitrogen oxides concentrations in London (contained in `AirQualityData.csv`) are provided in air_data.R.
 - Codes used for analysing Hadley Centre central England temperature data (contained in `hadcet.csv`) are provided in temp_data.R.
 
-To use WEM.gSA, do the following:
+To use WCM.gSa, do the following:
 
 - Source main.R into `R`.
 - Read the descriptions for `wcm.gsa` within main.R.
