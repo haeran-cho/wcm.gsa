@@ -9,8 +9,12 @@ x <- dat$mean
 x <- dat$max
 x <- dat$min
 
+matplot(dat[, 2:4], type = 'l', xaxt = 'n', xlab = '', ylab = '')
+axis(1, at = seq(1, length(x), length.out = 20), label = dat$dates[seq(1, length(x), length.out = 20)])
+
+
 ## change point analysis
-w <- wem.gsa(x, min.len = 10, p.max = 5, double.cusum = !TRUE)
+w <- wcm.gsa(x, min.len = 10, p.max = 5, double.cusum = !TRUE)
 dat$dates[w$cp]
 dat$dates[w$rcp]
 
@@ -18,9 +22,12 @@ plot(x, type = 'l', xaxt = 'n', xlab = '', ylab = '')
 axis(1, at = seq(1, length(x), length.out = 20), label = dat$dates[seq(1, length(x), length.out = 20)])
 abline(v = w$rcp, col = 2)
 
-brks <- c(0, w$rcp, length(x)); fhat <- x*0
-for(kk in 1:(length(brks) - 1)) fhat[(brks[kk] + 1):brks[kk + 1]] <- mean(x[(brks[kk] + 1):brks[kk + 1]])
-lines(fhat, col = 4, lwd = 2)
+fhat <- x * 0
+brks <- c(0, w$rcp, length(x))
+for(ii in 1:(length(w$cp) + 1)){
+  int <- (brks[ii] + 1):brks[ii + 1]
+  fhat[int] <- mean(x[int])
+}
 
 acf(x)
 acf(x - fhat)

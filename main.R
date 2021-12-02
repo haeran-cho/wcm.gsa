@@ -1,6 +1,6 @@
-#' WEM.gSA
+#' WCM.gSA
 #' 
-#' WEM.gSA procedure for multiple change point detection in the mean of serially correlated time series
+#' WCM.gSA procedure for multiple change point detection in the mean of serially correlated time series
 #' 
 #' @param x input data (a \code{numeric} vector)
 #' @param R number of deterministic intervals to be drawn at each iteration of WBS2
@@ -17,14 +17,14 @@
 #'    \item{cp.info}{matrix containing information about the change point estimators, such as their order of detection,
 #'    the intervals \code{(s, e)} in which each estimator (\code{b}) is detected, and the associated max-CUSUMs}
 #' @references H. Cho and P. Fryzlewicz (2021) Multiple change point detection under serial dependence: 
-#' wild energy maximisation and gappy Schwarz algorithm.
+#' wild contrast maximisation and gappy Schwarz algorithm. arXiv:2011.13884.
 #' @examples 
 #' set.seed(111)
 #' f <- rep(c(0, 5, 2, 8, 1, -2), c(100, 200, 200, 50, 200, 250))
 #' x <- f + arima.sim(list(ar = c(.75, -.5), ma = c(.8, .7, .6, .5, .4, .3)), n = length(f), sd = 1)
-#' wem.gsa(x, double.cusum = TRUE)
+#' wcm.gsa(x, double.cusum = TRUE)
 #' @export
-wem.gsa <- function(x, R = 100, min.len = NULL, 
+wcm.gsa <- function(x, R = 100, min.len = NULL, 
                     gappy = TRUE, Q = floor(log(length(x))^1.9), 
                     double.cusum = FALSE, max.iter = 5, 
                     p.max = 10, pen = log(length(x))^1.01) {

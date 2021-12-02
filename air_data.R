@@ -33,7 +33,7 @@ fit <- lm(y ~ ., data = dat[format.Date(dates, "%Y") < "2011" &
 x <- xx - predict(fit, newdata = dat)
 
 ## change point analysis
-w <- wem.gsa(x, max.iter = 10, min.len = 10, double.cusum = !TRUE)
+w <- wcm.gsa(x, max.iter = 10, min.len = 10, double.cusum = !TRUE)
 dates[w$cp]
 dates[w$rcp]
 
@@ -41,5 +41,13 @@ plot(x, type = 'l', xaxt = 'n', xlab = '', ylab = '')
 axis(1, at = seq(1, length(x), length.out = 20), label = format.Date(dates, "%Y-%m")[seq(1, length(x), length.out = 20)])
 abline(v = w$rcp, col = 2)
 
+fhat <- x * 0
+brks <- c(0, w$rcp, length(x))
+for(ii in 1:(length(w$cp) + 1)){
+  int <- (brks[ii] + 1):brks[ii + 1]
+  fhat[int] <- mean(x[int])
+}
+
 acf(x)
 acf(x - fhat)
+
