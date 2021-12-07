@@ -1,4 +1,4 @@
-# wem.gsa
+# wcm.gsa
 Software accompanying 
 > H. Cho and P. Fryzlewicz (2021) ["Multiple change point detection under serial dependence: wild contrast maximisation and gappy Schwarz algorithm".](https://arxiv.org/abs/2011.13884)
 
