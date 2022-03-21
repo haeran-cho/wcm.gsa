@@ -18,7 +18,7 @@ source("main.R")
 set.seed(111)
 f <- rep(c(0, 5, 2, 8, 1, -2), c(100, 200, 200, 50, 200, 250))
 x <- f + arima.sim(list(ar = c(.75, -.5), ma = c(.8, .7, .6, .5, .4, .3)), n = length(f), sd = 1)
-wcm.gsa(x, double.cusum = TRUE)
+wcm.gsa(x)
 ```
 
 If you have any questions, contact haeran.cho@bristol.ac.uk

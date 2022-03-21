@@ -2,12 +2,12 @@
 
 source('main.R')
 
-no <- read.csv("data/AirQualityData.csv", header = TRUE) 
+no <- read.csv("AirQualityData.csv", header = TRUE) 
 # contains dates and daily NO2 and NOx concentrations
 # measured at Marylebone Road in London, UK,
 # from September 1, 2000 to September 30, 2020
 
-hols <- read.csv("data/ukbankholidays.csv", header = TRUE)
+hols <- read.csv("ukbankholidays.csv", header = TRUE)
 # contains all UK bank holidays
 
 allhols <- as.Date(hols$UK.BANK.HOLIDAYS, "%d-%b-%Y")
@@ -33,16 +33,15 @@ fit <- lm(y ~ ., data = dat[format.Date(dates, "%Y") < "2011" &
 x <- xx - predict(fit, newdata = dat)
 
 ## change point analysis
-w <- wcm.gsa(x, max.iter = 10, min.len = 10, double.cusum = !TRUE)
+w <- wcm.gsa(x, max.iter = 10, min.len = 10)
 dates[w$cp]
-dates[w$rcp]
 
 plot(x, type = 'l', xaxt = 'n', xlab = '', ylab = '')
 axis(1, at = seq(1, length(x), length.out = 20), label = format.Date(dates, "%Y-%m")[seq(1, length(x), length.out = 20)])
-abline(v = w$rcp, col = 2)
+abline(v = w$cp, col = 2)
 
 fhat <- x * 0
-brks <- c(0, w$rcp, length(x))
+brks <- c(0, w$cp, length(x))
 for(ii in 1:(length(w$cp) + 1)){
   int <- (brks[ii] + 1):brks[ii + 1]
   fhat[int] <- mean(x[int])
